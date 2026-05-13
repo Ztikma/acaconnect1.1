@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AcaConnect – Tu conexión local</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<nav id="main-nav">
+  <div class="nav-logo" onclick="showPage('home')"><span>Aca</span><span>Connect</span></div>
+
+  <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul class="nav-links" id="nav-menu">
+    <li><a onclick="showPage('home')">Inicio</a></li>
+    <li><a onclick="showPage('marketplace')">Marketplace</a></li>
+    <li><a onclick="showPage('publish')">Publicar</a></li>
+    <li><a onclick="showPage('about')">Sobre Acapulco</a></li>
+    <li><a onclick="showPage('contact')">Contacto</a></li>
+    <li class="mobile-only" id="mobile-auth-placeholder">
+      <button class="btn-login" onclick="openModal('login'); document.getElementById('nav-menu').classList.remove('open');">Iniciar Sesión</button>
+      <button class="btn-register" onclick="openModal('register'); document.getElementById('nav-menu').classList.remove('open');">Registrarse</button>
+    </li>
+  </ul>
+
+  <div class="nav-actions" id="nav-actions">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+    <button class="btn-login" onclick="openModal('login')">Iniciar Sesión</button>
+    <button class="btn-register" onclick="openModal('register')">Registrarse</button>
+  </div>
+</nav>
+
+<div id="page-home" class="page active">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Descubre Acapulco</h1>
+    <p class="sub">Tu conexión local</p>
+    <p class="desc">Explora servicios locales, gastronomía auténtica y hospedaje único.<br>Conecta con la verdadera esencia del puerto.</p>
+    <div class="hero-actions">
+      <button class="btn-hero-primary" onclick="showPage('marketplace')">Explorar Marketplace →</button>
+      <button class="btn-hero-secondary" onclick="showPage('publish')">Publicar Servicio</button>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>DESCUBRE MÁS</span><span>↓</span></div>
+</div>
+
+<div id="page-marketplace" class="page">
+  <div class="mkt-header">
+    <h2>Marketplace Local</h2>
+    <p id="mkt-subtitle">Explora los servicios disponibles en Acapulco</p>
+  </div>
+  <div class="mkt-controls">
+    <div class="mkt-search">
+      <svg width="16" height="16" fill="none" stroke="#7A9090" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search-input" type="text" placeholder="Buscar servicios, restaurantes, hospedaje…" oninput="filterCards()"/>
+    </div>
+    <div class="filter-pills">
+      <button class="pill active" data-cat="todos" onclick="filterPill(this)">Todos</button>
+      <button class="pill" data-cat="gastronomia" onclick="filterPill(this)">Gastronomía</button>
+      <button class="pill" data-cat="hospedaje" onclick="filterPill(this)">Hospedaje</button>
+      <button class="pill" data-cat="servicios" onclick="filterPill(this)">Servicios</button>
+      <button class="pill" data-cat="experiencias" onclick="filterPill(this)">Experiencias</button>
+    </div>
+    <select class="sort-select" onchange="sortCards(this.value)">
+      <option value="recientes">Más recientes</option>
+      <option value="precio-asc">Precio: menor a mayor</option>
+      <option value="precio-desc">Precio: mayor a menor</option>
+      <option value="mejor-rating">Mejor calificados</option>
+    </select>
+  </div>
+  <div class="mkt-body">
+    <p class="mkt-count" id="mkt-count"></p>
+    <div class="cards-grid" id="cards-grid">
+      </div>
+  </div>
+</div>
+
+<div id="page-publish" class="page">
+  <div class="publish-container">
+    <h2>Publicar un Servicio</h2>
+    <p>Comparte lo que ofreces con miles de visitantes en Acapulco</p>
+    <div class="form-card">
+      <div class="form-group">
+        <label class="form-label">Título del servicio <span class="req">*</span></label>
+        <input class="form-input" type="text" placeholder="Ej: Clases de surf en Playa Revolcadero" id="pub-title"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría <span class="req">*</span></label>
+        <div class="cat-grid">
+          <button class="cat-btn" data-cat="gastronomia" onclick="selectCat(this)"><span class="cat-icon">🍴</span>Gastronomía</button>
+          <button class="cat-btn" data-cat="hospedaje" onclick="selectCat(this)"><span class="cat-icon">🏨</span>Hospedaje</button>
+          <button class="cat-btn" data-cat="servicios" onclick="selectCat(this)"><span class="cat-icon">💼</span>Servicios</button>
+          <button class="cat-btn" data-cat="experiencias" onclick="selectCat(this)"><span class="cat-icon">⛵</span>Experiencias</button>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label class="form-label">Precio ($MXN) <span class="req">*</span></label>
+          <input class="form-input" type="number" placeholder="Ej: 500" id="pub-price" min="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de precio <span class="req">*</span></label>
+          <select class="form-select" id="pub-price-type">
+            <option>precio fijo</option><option>por persona</option><option>por noche</option><option>por grupo</option><option>por hora</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ubicación <span class="req">*</span></label>
+        <select class="form-select" id="pub-location">
+          <option value="">Selecciona una ubicación</option>
+          <option>Zona Diamante</option><option>Zona Dorada</option><option>Acapulco Tradicional</option>
+          <option>La Quebrada</option><option>Playa Revolcadero</option><option>Playa Pie de la Cuesta</option>
+          <option>Centro de Acapulco</option><option>Boca Chica</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción <span class="req">*</span></label>
+        <textarea class="form-textarea" placeholder="Describe tu servicio en detalle…" id="pub-desc" maxlength="500" oninput="updateCount()"></textarea>
+        <div class="char-count" id="char-count">0/500</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Foto principal <span class="req">*</span></label>
+        <div class="foto-upload-area" id="main-drop" ondragover="handleDrag(event,'main-drop')" ondragleave="handleDragLeave(event,'main-drop')" ondrop="handleDrop(event,'main',0)">
+          <input type="file" accept="image/*" onchange="handleFileSelect(this,'main',0)"/>
+          <div class="foto-upload-icon">📷</div>
+          <p>Arrastra tu foto aquí o haz clic para seleccionar</p>
+          <small>JPG, PNG o WEBP · Máximo 5MB</small>
+        </div>
+        <div class="upload-progress" id="prog-main"><div class="upload-progress-bar" id="progbar-main"></div></div>
+        <div class="foto-preview-grid" id="preview-main"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fotos adicionales <span style="font-weight:400;color:var(--text-light)">(hasta 4)</span></label>
+        <div class="foto-preview-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="foto-extra-slot" id="slot-0" ondragover="handleDrag(event,'slot-0')" ondragleave="handleDragLeave(event,'slot-0')" ondrop="handleDrop(event,'extra',0)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',0)"/>
+            <span class="plus">+</span>
+          </div>
+          <div class="foto-extra-slot" id="slot-1" ondragover="handleDrag(event,'slot-1')" ondragleave="handleDragLeave(event,'slot-1')" ondrop="handleDrop(event,'extra',1)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',1)"/>
+            <span class="plus">+</span>
+          </div>
+          <div class="foto-extra-slot" id="slot-2" ondragover="handleDrag(event,'slot-2')" ondragleave="handleDragLeave(event,'slot-2')" ondrop="handleDrop(event,'extra',2)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',2)"/>
+            <span class="plus">+</span>
+          </div>
+          <div class="foto-extra-slot" id="slot-3" ondragover="handleDrag(event,'slot-3')" ondragleave="handleDragLeave(event,'slot-3')" ondrop="handleDrop(event,'extra',3)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',3)"/>
+            <span class="plus">+</span>
+          </div>
+        </div>
+        <p class="hint" style="margin-top:10px;">Muestra tu servicio desde diferentes ángulos para atraer más clientes.</p>
+      </div>
+      <div class="form-actions">
+        <button class="btn-publish" onclick="publishService()">Publicar Servicio</button>
+        <button class="btn-cancel" onclick="showPage('marketplace')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-about" class="page">
+  <div class="about-hero">
+    <div class="about-hero-bg"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content">
+      <div class="editorial-nav">01 / 02 / <strong>03</strong> / 04</div>
+      <h2>VISITA ACAPULCO</h2>
+      <p>La joya eterna del Pacífico</p>
+      <div class="hero-icons-row" style="margin-top:20px; font-size: 24px; gap:20px; display:flex; justify-content:center;">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-welcome text-center">
+    <span class="label-small" style="font-size:12px; letter-spacing:4px; text-transform:uppercase; color:var(--text-dark);">Welcome / Bienvenido</span>
+    <div class="editorial-separator"></div>
+    <p class="editorial-quote">"AcaConnect es la ventana digital a la realidad del puerto. Buscamos capturar la verdad detrás de cada atardecer, escondida en el alma de su gente y sus tradiciones."</p>
+  </div>
+
+  <div class="about-stats-section text-center">
+    <h3 style="font-size:14px; letter-spacing:4px; text-transform:uppercase; color:var(--text-dark);">Acapulco en números</h3>
+    <div class="editorial-separator"></div>
+    
+    <div class="stats-grid" id="stats-grid-container">
+      <div class="stat-item">
+        <span class="stat-number" id="weather-temp">--°</span>
+        <span class="stat-label">clima en la bahía</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number count-up" data-target="360">0</span>
+        <span class="stat-label">días de sol garantizados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number count-up" data-target="24">0</span>
+        <span class="stat-label">playas por descubrir</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number count-up" data-target="15420">0</span>
+        <span class="stat-label">viajeros conectados</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="page-contact" class="page">
+  <h2>Contacto</h2>
+  <p class="contact-sub">Estamos para ayudarte a conectar con lo mejor de Acapulco</p>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>AcaConnect es una plataforma creada por y para los acapulqueños. Si tienes dudas, sugerencias o quieres saber cómo publicar tu servicio, no dudes en escribirnos.</p>
+      <div class="contact-detail"><div class="dot">📧</div><span>hola@acaconnect.mx</span></div>
+      <div class="contact-detail"><div class="dot">📱</div><span>+52 744 123 4567</span></div>
+      <div class="contact-detail"><div class="dot">📍</div><span>Acapulco de Juárez, Guerrero, México</span></div>
+    </div>
+    <div class="form-card" style="padding:32px;">
+      <div class="form-group"><label class="form-label">Tu nombre</label><input class="form-input" type="text" placeholder="Nombre completo" id="contact-nombre"/></div>
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="correo@ejemplo.com" id="contact-email"/></div>
+      <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-textarea" placeholder="¿En qué podemos ayudarte?" id="contact-mensaje"></textarea></div>
+      <button class="btn-publish" onclick="sendContact()">Enviar Mensaje</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="auth-modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-logo"><span>Aca</span><span>Connect</span></div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchTab('login')">Iniciar Sesión</div>
+      <div class="modal-tab" onclick="switchTab('register')">Registrarse</div>
+    </div>
+    <div class="modal-form active" id="tab-login">
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="correo@ejemplo.com" id="login-email"/></div>
+      <div class="form-group"><label class="form-label">Contraseña</label>
+        <div class="pass-wrapper">
+          <input class="form-input" type="password" placeholder="••••••••" id="login-pass"/>
+          <button type="button" class="btn-eye" onclick="togglePass('login-pass',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <button class="btn-modal-submit" onclick="doLogin()">Iniciar Sesión</button>
+    </div>
+    <div class="modal-form" id="tab-register">
+      <div class="form-group"><label class="form-label">Nombre completo</label><input class="form-input" type="text" placeholder="Tu nombre" id="reg-name"/></div>
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="correo@ejemplo.com" id="reg-email"/></div>
+      <div class="form-group"><label class="form-label">Número de teléfono <span style="font-weight:400;color:var(--text-light)">(opcional)</span></label>
+        <div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s;" onfocusin="this.style.borderColor='var(--teal)'" onfocusout="this.style.borderColor='var(--border)'">
+          <span style="padding:0 12px;font-size:14px;color:var(--text-mid);border-right:1.5px solid var(--border);line-height:48px;background:#FAFAFA;">🇲🇽 +52</span>
+          <input style="border:none;outline:none;padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:14px;flex:1;" type="tel" placeholder="744 123 4567" id="reg-phone" maxlength="10"/>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Contraseña</label>
+        <div class="pass-wrapper">
+          <input class="form-input" type="password" placeholder="Mínimo 6 caracteres" id="reg-pass"/>
+          <button type="button" class="btn-eye" onclick="togglePass('reg-pass',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <button class="btn-modal-submit" onclick="doRegister()">Crear Cuenta</button>
+    </div>
+  </div>
+</div>
+
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetailOutside(event)">
+  <div class="detail-modal" id="detail-modal">
+    <button class="detail-close" onclick="closeDetail()">×</button>
+    <div class="detail-gallery">
+      <img class="detail-main-img" id="detail-main-img" src="" alt=""/>
+      <div class="detail-thumbs" id="detail-thumbs"></div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-main">
+        <div class="detail-cat-badge" id="detail-cat-badge"></div>
+        <h2 class="detail-title" id="detail-title"></h2>
+        <div class="detail-rating-row">
+          <div class="stars-row" id="detail-stars"></div>
+          <span class="detail-rating-num" id="detail-rating-num"></span>
+          <span class="detail-reviews" id="detail-reviews"></span>
+        </div>
+        <div class="detail-section-label">Sobre este servicio</div>
+        <p class="detail-desc" id="detail-desc"></p>
+        <div class="detail-location" id="detail-location">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="detail-loc-text"></span>
+        </div>
+        <div class="detail-provider" id="detail-provider"></div>
+      </div>
+      <div class="detail-sidebar">
+        <div class="detail-price-box">
+          <div class="detail-price" id="detail-price"></div>
+          <div class="detail-price-type" id="detail-price-type"></div>
+          <button class="btn-contact-provider" id="btn-contact" onclick="contactProvider()">Contactar proveedor</button>
+          <button class="btn-share" onclick="shareService()">🔗 Compartir</button>
+        </div>
+      </div>
+    </div>
+    <div class="resenas-section" id="resenas-section">
+      <div class="resenas-header"><h3>Reseñas</h3></div>
+      <div class="resenas-summary" id="resenas-summary" style="display:none;">
+        <div class="resenas-big-num" id="resena-avg">0</div>
+        <div class="resenas-summary-right">
+          <div class="resenas-summary-stars" id="resena-avg-stars"></div>
+          <div class="resenas-total" id="resena-total"></div>
+          <div id="resena-dist" style="margin-top:10px;"></div>
+        </div>
+      </div>
+      <div id="resena-form-area"></div>
+      <div id="resenas-list"><div class="resenas-empty">Cargando reseñas...</div></div>
+    </div>
+    <div class="detail-similares">
+      <h3>Más en <span id="detail-cat-label-sim"></span> <a onclick="filterByCatAndClose()">Ver todos →</a></h3>
+      <div class="similares-grid" id="similares-grid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="profile-modal-overlay" onclick="if(event.target===this)closeProfileModal()">
+  <div class="profile-modal">
+    <button class="modal-close" onclick="closeProfileModal()">×</button>
+    <h3>Editar Perfil</h3>
+    <div class="avatar-upload">
+      <div class="avatar-big" id="avatar-big-preview" onclick="document.getElementById('avatar-file-input').click()">
+        <span id="avatar-big-letter"></span>
+        <div class="avatar-big-overlay">📷</div>
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="previewAvatar(this)"/>
+      </div>
+      <span class="avatar-upload-hint">Toca para cambiar tu foto</span>
+    </div>
+    <div class="form-group"><label class="form-label">Nombre completo</label><input class="form-input" type="text" id="profile-nombre"/></div>
+    <div class="form-group"><label class="form-label">Teléfono</label>
+      <div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;" onfocusin="this.style.borderColor='var(--teal)'" onfocusout="this.style.borderColor='var(--border)'">
+        <span style="padding:0 12px;font-size:14px;color:var(--text-mid);border-right:1.5px solid var(--border);line-height:48px;background:#FAFAFA;">🇲🇽 +52</span>
+        <input style="border:none;outline:none;padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:14px;flex:1;" type="tel" id="profile-telefono" maxlength="10"/>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" id="profile-email" disabled style="opacity:.6;cursor:not-allowed;"/></div>
+    <button class="btn-publish" onclick="saveProfile()">Guardar Cambios</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="mispub-modal-overlay" onclick="if(event.target===this)closeMisPub()">
+  <div class="mispub-modal">
+    <button class="modal-close" onclick="closeMisPub()">×</button>
+    <h3>Mis Publicaciones</h3>
+    <div id="mispub-content"><div class="loading-state"><div class="spinner"></div><p>Cargando...</p></div></div>
+  </div>
+</div>
+
+<div class="admin-overlay" id="admin-panel" onclick="closeAdminOutside(event)">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div style="display:flex;align-items:center;">
+        <h2>Panel de Administración</h2>
+        <span class="badge-count" id="admin-badge">0</span>
+      </div>
+      <button class="modal-close" style="position:static;font-size:26px;" onclick="closeAdmin()">×</button>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="pendientes" onclick="switchAdminTab(this)">⏳ Pendientes</button>
+      <button class="admin-tab" data-tab="activos" onclick="switchAdminTab(this)">✅ Activos</button>
+      <button class="admin-tab" data-tab="rechazados" onclick="switchAdminTab(this)">❌ Rechazados</button>
+      <button class="admin-tab" data-tab="usuarios" onclick="switchAdminTab(this)">👥 Usuarios</button>
+    </div>
+    <div class="admin-list" id="admin-list">
+      <div class="loading-state"><div class="spinner"></div><p>Cargando...</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
