@@ -1,352 +1,382 @@
-:root {
-  --orange:#F05A28;--orange-light:#FF7A45;--teal:#1A7A6E;--teal-dark:#125A51;
-  --bg-light:#F4F8F7;--bg-white:#FFFFFF;--text-dark:#1A2B2A;--text-mid:#4A6060;
-  --text-light:#7A9090;--border:#DDE8E6;--shadow:0 4px 24px rgba(0,0,0,0.08);
-  --shadow-lg:0 12px 48px rgba(0,0,0,0.14);
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AcaConnect – Tu conexión local</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
 
-[data-theme="dark"] {
-  --bg-white: #260729;    
-  --bg-light: #2A2344;    
-  --text-dark: #CCBD9E;   
-  --text-mid: #949ab1;    
-  --text-light: #495168;  
-  --border: #495168;      
-  --shadow: 0 4px 24px rgba(0,0,0,0.6); 
-}
+<nav id="main-nav">
+  <div class="nav-logo" onclick="showPage('home')"><span>Aca</span><span>Connect</span></div>
 
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;color:var(--text-dark);background:var(--bg-white);overflow-x:hidden; transition: background 0.3s, color 0.3s;}
+  <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
 
-/* NAVBAR */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;background:rgba(10,20,18,0.72);backdrop-filter:blur(14px);transition:background .3s;}
-nav.scrolled{background:rgba(255,255,255,0.97);box-shadow:var(--shadow);}
-nav.scrolled .nav-logo span:first-child{color:var(--text-dark);}
-nav.scrolled .nav-links a{color:var(--text-mid);}
-nav.scrolled .btn-login{color:var(--text-dark);border-color:var(--border);}
-[data-theme="dark"] nav.scrolled { background: rgba(38, 7, 41, 0.95); border-bottom: 1px solid var(--border); }
-[data-theme="dark"] nav.scrolled .nav-logo span:first-child { color: #fff; }
-[data-theme="dark"] nav.scrolled .nav-links a { color: rgba(255,255,255,0.85); }
-[data-theme="dark"] nav.scrolled .btn-login { color: #fff; border-color: rgba(255,255,255,0.6); }
+  <ul class="nav-links" id="nav-menu">
+    <li><a onclick="showPage('home')">Inicio</a></li>
+    <li><a onclick="showPage('marketplace')">Marketplace</a></li>
+    <li><a onclick="showPage('publish')">Publicar</a></li>
+    <li><a onclick="showPage('about')">Sobre Acapulco</a></li>
+    <li><a onclick="showPage('contact')">Contacto</a></li>
+    <li class="mobile-only" id="mobile-auth-placeholder">
+      <button class="btn-login" onclick="openModal('login'); document.getElementById('nav-menu').classList.remove('open');">Iniciar Sesión</button>
+      <button class="btn-register" onclick="openModal('register'); document.getElementById('nav-menu').classList.remove('open');">Registrarse</button>
+    </li>
+  </ul>
 
-.nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;cursor:pointer;display:flex;align-items:center;}
-.nav-logo span:first-child{color:#fff;transition:color .3s;}
-.nav-logo span:last-child{color:var(--orange);}
-.nav-links{display:flex;gap:32px;list-style:none;}
-.nav-links a{color:rgba(255,255,255,0.85);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s;cursor:pointer;}
-.nav-links a:hover{color:var(--orange);}
-.nav-actions{display:flex;gap:12px;align-items:center;}
-.btn-login{background:transparent;border:1.5px solid rgba(255,255,255,0.6);color:#fff;padding:8px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;}
-.btn-login:hover{background:rgba(255,255,255,0.12);}
-.btn-register{background:var(--orange);border:none;color:#fff;padding:9px 22px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;}
-.btn-register:hover{background:var(--orange-light);}
+  <div class="nav-actions" id="nav-actions">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+    <button class="btn-login" onclick="openModal('login')">Iniciar Sesión</button>
+    <button class="btn-register" onclick="openModal('register')">Registrarse</button>
+  </div>
+</nav>
 
-/* THEME TOGGLE */
-.theme-toggle { background: none; border: none; font-size: 20px; cursor: pointer; color: #fff; margin-right: 10px; transition: transform 0.2s; }
-.theme-toggle:hover { transform: scale(1.15); }
-[data-theme="dark"] nav.scrolled .theme-toggle { color: #fff; }
-nav.scrolled .theme-toggle { color: var(--text-dark); }
+<div id="page-home" class="page active">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Descubre Acapulco</h1>
+    <p class="sub">Tu conexión local</p>
+    <p class="desc">Explora servicios locales, gastronomía auténtica y hospedaje único.<br>Conecta con la verdadera esencia del puerto.</p>
+    <div class="hero-actions">
+      <button class="btn-hero-primary" onclick="showPage('marketplace')">Explorar Marketplace →</button>
+      <button class="btn-hero-secondary" onclick="showPage('publish')">Publicar Servicio</button>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>DESCUBRE MÁS</span><span>↓</span></div>
+</div>
 
-/* MOBILE MENU & NAV TOGGLE */
-.nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; z-index: 110; }
-.nav-toggle span { width: 25px; height: 2px; background: #fff; transition: 0.3s; }
-nav.scrolled .nav-toggle span { background: var(--text-dark); }
-[data-theme="dark"] nav.scrolled .nav-toggle span { background: #fff; }
-.mobile-only { display: none; }
+<div id="page-marketplace" class="page">
+  <div class="mkt-header">
+    <h2>Marketplace Local</h2>
+    <p id="mkt-subtitle">Explora los servicios disponibles en Acapulco</p>
+  </div>
+  <div class="mkt-controls">
+    <div class="mkt-search">
+      <svg width="16" height="16" fill="none" stroke="#7A9090" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search-input" type="text" placeholder="Buscar servicios, restaurantes, hospedaje…" oninput="filterCards()"/>
+    </div>
+    <div class="filter-pills">
+      <button class="pill active" data-cat="todos" onclick="filterPill(this)">Todos</button>
+      <button class="pill" data-cat="gastronomia" onclick="filterPill(this)">Gastronomía</button>
+      <button class="pill" data-cat="hospedaje" onclick="filterPill(this)">Hospedaje</button>
+      <button class="pill" data-cat="servicios" onclick="filterPill(this)">Servicios</button>
+      <button class="pill" data-cat="experiencias" onclick="filterPill(this)">Experiencias</button>
+    </div>
+    <select class="sort-select" onchange="sortCards(this.value)">
+      <option value="recientes">Más recientes</option>
+      <option value="precio-asc">Precio: menor a mayor</option>
+      <option value="precio-desc">Precio: mayor a menor</option>
+      <option value="mejor-rating">Mejor calificados</option>
+    </select>
+  </div>
+  <div class="mkt-body">
+    <p class="mkt-count" id="mkt-count"></p>
+    <div class="cards-grid" id="cards-grid">
+      </div>
+  </div>
+</div>
 
-/* PAGES & COMMON */
-.page{display:none!important;}
-.page.active{display:block!important;}
+<div id="page-publish" class="page">
+  <div class="publish-container">
+    <h2>Publicar un Servicio</h2>
+    <p>Comparte lo que ofreces con miles de visitantes en Acapulco</p>
+    <div class="form-card">
+      <div class="form-group">
+        <label class="form-label">Título del servicio <span class="req">*</span></label>
+        <input class="form-input" type="text" placeholder="Ej: Clases de surf en Playa Revolcadero" id="pub-title"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría <span class="req">*</span></label>
+        <div class="cat-grid">
+          <button class="cat-btn" data-cat="gastronomia" onclick="selectCat(this)"><span class="cat-icon">🍴</span>Gastronomía</button>
+          <button class="cat-btn" data-cat="hospedaje" onclick="selectCat(this)"><span class="cat-icon">🏨</span>Hospedaje</button>
+          <button class="cat-btn" data-cat="servicios" onclick="selectCat(this)"><span class="cat-icon">💼</span>Servicios</button>
+          <button class="cat-btn" data-cat="experiencias" onclick="selectCat(this)"><span class="cat-icon">⛵</span>Experiencias</button>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="form-group">
+          <label class="form-label">Precio ($MXN) <span class="req">*</span></label>
+          <input class="form-input" type="number" placeholder="Ej: 500" id="pub-price" min="0"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de precio <span class="req">*</span></label>
+          <select class="form-select" id="pub-price-type">
+            <option>precio fijo</option><option>por persona</option><option>por noche</option><option>por grupo</option><option>por hora</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ubicación <span class="req">*</span></label>
+        <select class="form-select" id="pub-location">
+          <option value="">Selecciona una ubicación</option>
+          <option>Zona Diamante</option><option>Zona Dorada</option><option>Acapulco Tradicional</option>
+          <option>La Quebrada</option><option>Playa Revolcadero</option><option>Playa Pie de la Cuesta</option>
+          <option>Centro de Acapulco</option><option>Boca Chica</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Descripción <span class="req">*</span></label>
+        <textarea class="form-textarea" placeholder="Describe tu servicio en detalle…" id="pub-desc" maxlength="500" oninput="updateCount()"></textarea>
+        <div class="char-count" id="char-count">0/500</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Foto principal <span class="req">*</span></label>
+        <div class="foto-upload-area" id="main-drop" ondragover="handleDrag(event,'main-drop')" ondragleave="handleDragLeave(event,'main-drop')" ondrop="handleDrop(event,'main',0)">
+          <input type="file" accept="image/*" onchange="handleFileSelect(this,'main',0)"/>
+          <div class="foto-upload-icon">📷</div>
+          <p>Arrastra tu foto aquí o haz clic para seleccionar</p>
+          <small>JPG, PNG o WEBP · Máximo 5MB</small>
+        </div>
+        <div class="upload-progress" id="prog-main"><div class="upload-progress-bar" id="progbar-main"></div></div>
+        <div class="foto-preview-grid" id="preview-main"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fotos adicionales <span style="font-weight:400;color:var(--text-light)">(hasta 4)</span></label>
+        <div class="foto-preview-grid" style="grid-template-columns:repeat(4,1fr);">
+          <div class="foto-extra-slot" id="slot-0" ondragover="handleDrag(event,'slot-0')" ondragleave="handleDragLeave(event,'slot-0')" ondrop="handleDrop(event,'extra',0)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',0)"/>
+            <span class="plus">+</span>
+          </div>
+          <div class="foto-extra-slot" id="slot-1" ondragover="handleDrag(event,'slot-1')" ondragleave="handleDragLeave(event,'slot-1')" ondrop="handleDrop(event,'extra',1)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',1)"/>
+            <span class="plus">+</span>
+          </div>
+          <div class="foto-extra-slot" id="slot-2" ondragover="handleDrag(event,'slot-2')" ondragleave="handleDragLeave(event,'slot-2')" ondrop="handleDrop(event,'extra',2)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',2)"/>
+            <span class="plus">+</span>
+          </div>
+          <div class="foto-extra-slot" id="slot-3" ondragover="handleDrag(event,'slot-3')" ondragleave="handleDragLeave(event,'slot-3')" ondrop="handleDrop(event,'extra',3)">
+            <input type="file" accept="image/*" onchange="handleFileSelect(this,'extra',3)"/>
+            <span class="plus">+</span>
+          </div>
+        </div>
+        <p class="hint" style="margin-top:10px;">Muestra tu servicio desde diferentes ángulos para atraer más clientes.</p>
+      </div>
+      <div class="form-actions">
+        <button class="btn-publish" onclick="publishService()">Publicar Servicio</button>
+        <button class="btn-cancel" onclick="showPage('marketplace')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-/* HOME HERO */
-#page-home{position:relative;height:100vh;min-height:600px;text-align:center;overflow:hidden;}
-#page-home.active{display:flex!important;align-items:center;justify-content:center;}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80') center/cover no-repeat;transform:scale(1.05);animation:heroZoom 18s ease-in-out infinite alternate;}
-@keyframes heroZoom{from{transform:scale(1.05);}to{transform:scale(1.12);}}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.55) 60%,rgba(0,0,0,0.7) 100%);}
-.hero-content{position:relative;z-index:2;max-width:700px;padding:0 24px;}
-.hero-content h1{font-family:'Playfair Display',serif;font-size:clamp(52px,7vw,88px);font-weight:900;color:#fff;line-height:1;letter-spacing:-1px;animation:fadeUp .9s ease both;}
-.hero-content p.sub{font-size:22px;color:rgba(255,255,255,0.9);margin-top:12px;font-weight:300;animation:fadeUp .9s .18s ease both;}
-.hero-content p.desc{font-size:15px;color:rgba(255,255,255,0.7);margin-top:16px;line-height:1.7;animation:fadeUp .9s .3s ease both;}
-.hero-actions{display:flex;gap:16px;justify-content:center;margin-top:36px;animation:fadeUp .9s .44s ease both;}
-.btn-hero-primary{background:var(--orange);color:#fff;border:none;padding:14px 32px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .22s;}
-.btn-hero-primary:hover{background:var(--orange-light);transform:translateY(-2px);}
-.btn-hero-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.7);padding:14px 32px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .22s;}
-.btn-hero-secondary:hover{background:rgba(255,255,255,0.12);}
-.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;letter-spacing:2px;text-transform:uppercase;z-index:2;animation:bounce 2s infinite;}
-@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+<div id="page-about" class="page">
+  <div class="about-hero">
+    <div class="about-hero-bg"></div>
+    <div class="about-hero-overlay"></div>
+    <div class="about-hero-content">
+      <div class="editorial-nav">01 / 02 / <strong>03</strong> / 04</div>
+      <h2>VISITA ACAPULCO</h2>
+      <p>La joya eterna del Pacífico</p>
+      <div class="hero-icons-row" style="margin-top:20px; font-size: 24px; gap:20px; display:flex; justify-content:center;">
+        <span>🏝️</span><span>🍹</span><span>✈️</span>
+      </div>
+    </div>
+  </div>
 
-/* MARKETPLACE */
-#page-marketplace{min-height:100vh;background:var(--bg-light);}
-.mkt-header{background:#fff;padding:100px 64px 40px;border-bottom:1px solid var(--border);}
-.mkt-header h2{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:var(--teal-dark);}
-.mkt-header p{color:var(--text-mid);margin-top:6px;font-size:15px;}
-.mkt-controls{display:flex;align-items:center;gap:16px;padding:28px 64px;background:#fff;flex-wrap:wrap;border-bottom:1px solid var(--border);}
-.mkt-search{flex:1;min-width:240px;display:flex;align-items:center;border:1.5px solid var(--border);border-radius:100px;padding:10px 20px;gap:10px;background:#fff;transition:border-color .2s;}
-.mkt-search:focus-within{border-color:var(--teal);}
-.mkt-search input{border:none;outline:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:14px;width:100%;color:var(--text-dark);}
-.mkt-search input::placeholder{color:var(--text-light);}
-.filter-pills{display:flex;gap:8px;flex-wrap:wrap;}
-.pill{padding:9px 20px;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-mid);transition:all .18s;}
-.pill.active,.pill:hover{background:var(--teal);color:#fff;border-color:var(--teal);}
-.sort-select{border:1.5px solid var(--border);border-radius:100px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-mid);background:#fff;cursor:pointer;outline:none;}
-.mkt-body{padding:32px 64px 64px;}
-.mkt-count{font-size:14px;color:var(--text-mid);margin-bottom:28px;font-weight:500;}
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:28px;}
-.card{background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:transform .22s,box-shadow .22s;cursor:pointer;}
-.card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,0.12);}
-.card-img{position:relative;height:220px;overflow:hidden;}
-.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
-.card:hover .card-img img{transform:scale(1.07);}
-.card-badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.96);padding:5px 14px;border-radius:100px;font-size:12px;font-weight:600;color:var(--teal-dark);box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-.card-price{position:absolute;bottom:14px;right:14px;background:var(--orange);color:#fff;padding:6px 16px;border-radius:100px;font-size:13px;font-weight:700;box-shadow:0 2px 10px rgba(240,90,40,0.4);}
-.card-price strong{font-size:15px;}
-.card-body{padding:18px 18px 10px;}
-.card-body h3{font-size:16px;font-weight:700;color:var(--text-dark);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.card-loc{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-light);margin-top:10px;}
-.card-rating{display:flex;align-items:center;gap:6px;padding:12px 18px 18px;border-top:1px solid var(--border);margin-top:12px;}
-.stars-row{display:flex;gap:2px;}
-.star{font-size:14px;color:#D0D8D6;}
-.star.filled{color:#F5A623;}
-.rating-count{font-size:13px;color:var(--text-light);margin-left:2px;}
-.card-footer{display:flex;align-items:center;justify-content:space-between;padding:0 18px 14px;}
-.btn-delete{background:none;border:1.5px solid #FFCDD2;color:#E53935;border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif;}
-.btn-delete:hover{background:#E53935;color:#fff;border-color:#E53935;}
-.empty-state{text-align:center;padding:80px 20px;color:var(--text-light);}
-.loading-state{text-align:center;padding:80px 20px;color:var(--text-light);}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.skeleton { background: #eee; background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%); border-radius: 12px; background-size: 200% 100%; animation: 1.5s shine linear infinite; height: 320px; width: 100%;}
-@keyframes shine { to { background-position-x: -200%; } }
+  <div class="about-welcome text-center">
+    <span class="label-small" style="font-size:12px; letter-spacing:4px; text-transform:uppercase; color:var(--text-dark);">Welcome / Bienvenido</span>
+    <div class="editorial-separator"></div>
+    <p class="editorial-quote">"AcaConnect es la ventana digital a la realidad del puerto. Buscamos capturar la verdad detrás de cada atardecer, escondida en el alma de su gente y sus tradiciones."</p>
+  </div>
 
-/* PUBLICAR */
-#page-publish{min-height:100vh;background:var(--bg-light);padding:100px 0 80px;}
-.publish-container{max-width:760px;margin:0 auto;padding:0 32px;}
-.publish-container h2{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--teal-dark);}
-.publish-container>p{color:var(--text-mid);margin-top:8px;font-size:15px;margin-bottom:36px;}
-.form-card{background:#fff;border-radius:20px;padding:40px;box-shadow:var(--shadow);}
-.form-group{margin-bottom:28px;}
-.form-label{display:block;font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:10px;}
-.form-label .req{color:var(--orange);margin-left:2px;}
-.form-input,.form-textarea,.form-select{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-dark);background:#fff;outline:none;transition:border-color .2s;appearance:none;}
-.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--teal);}
-.form-textarea{min-height:120px;resize:vertical;line-height:1.6;}
-.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.cat-btn{border:1.5px solid var(--border);border-radius:12px;padding:20px 8px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-mid);font-weight:500;transition:all .18s;}
-.cat-btn:hover,.cat-btn.active{border-color:var(--teal);color:var(--teal-dark);background:#EFF6F5;}
-.row-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-.char-count{text-align:right;font-size:12px;color:var(--text-light);margin-top:6px;}
-.foto-upload-area{border:2px dashed var(--border);border-radius:14px;padding:32px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;}
-.foto-upload-area:hover{border-color:var(--teal);background:#EFF6F5;}
-.foto-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.foto-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:14px;}
-.foto-extra-slot{border:2px dashed var(--border);border-radius:10px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all .2s;overflow:hidden;}
-.foto-extra-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.foto-extra-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.foto-extra-slot .btn-rm-extra{position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:14px;cursor:pointer;z-index:2;}
-.btn-publish{width:100%;background:var(--orange);color:#fff;border:none;border-radius:100px;padding:15px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;}
-.btn-publish:hover{background:var(--orange-light);}
+  <div class="about-stats-section text-center">
+    <h3 style="font-size:14px; letter-spacing:4px; text-transform:uppercase; color:var(--text-dark);">Acapulco en números</h3>
+    <div class="editorial-separator"></div>
+    
+    <div class="stats-grid" id="stats-grid-container">
+      <div class="stat-item">
+        <span class="stat-number" id="weather-temp">--°</span>
+        <span class="stat-label">clima en la bahía</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number count-up" data-target="360">0</span>
+        <span class="stat-label">días de sol garantizados</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number count-up" data-target="24">0</span>
+        <span class="stat-label">playas por descubrir</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number count-up" data-target="15420">0</span>
+        <span class="stat-label">viajeros conectados</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-/* ─── SOBRE ACAPULCO (ESTILO EDITORIAL MINIMALISTA) ─── */
-#page-about {
-  min-height: 100vh;
-  background: var(--bg-white);
-  padding-top: 64px; 
-  padding-bottom: 80px;
-}
-.about-hero {
-  position: relative;
-  height: 70vh;
-  min-height: 450px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-.about-hero-bg {
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?w=1600&q=80') center/cover no-repeat;
-  z-index: 1;
-}
-.about-hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(15, 23, 21, 0.3) 0%, rgba(15, 23, 21, 0.8) 100%);
-  z-index: 2;
-}
-.about-hero-content {
-  position: relative;
-  z-index: 3;
-  color: #fff;
-  padding: 0 20px;
-}
-.about-hero-content h2 {
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(40px, 6vw, 90px);
-  font-weight: 700;
-  letter-spacing: 14px; 
-  text-transform: uppercase;
-  margin-bottom: 16px;
-  line-height: 1.1;
-}
-.about-hero-content p {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(18px, 3vw, 24px);
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.85);
-  letter-spacing: 1px;
-}
-.editorial-nav { font-size:12px; letter-spacing:4px; margin-bottom:20px; opacity:0.7; }
+<div id="page-contact" class="page">
+  <h2>Contacto</h2>
+  <p class="contact-sub">Estamos para ayudarte a conectar con lo mejor de Acapulco</p>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>AcaConnect es una plataforma creada por y para los acapulqueños. Si tienes dudas, sugerencias o quieres saber cómo publicar tu servicio, no dudes en escribirnos.</p>
+      <div class="contact-detail"><div class="dot">📧</div><span>hola@acaconnect.mx</span></div>
+      <div class="contact-detail"><div class="dot">📱</div><span>+52 744 123 4567</span></div>
+      <div class="contact-detail"><div class="dot">📍</div><span>Acapulco de Juárez, Guerrero, México</span></div>
+    </div>
+    <div class="form-card" style="padding:32px;">
+      <div class="form-group"><label class="form-label">Tu nombre</label><input class="form-input" type="text" placeholder="Nombre completo" id="contact-nombre"/></div>
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="correo@ejemplo.com" id="contact-email"/></div>
+      <div class="form-group"><label class="form-label">Mensaje</label><textarea class="form-textarea" placeholder="¿En qué podemos ayudarte?" id="contact-mensaje"></textarea></div>
+      <button class="btn-publish" onclick="sendContact()">Enviar Mensaje</button>
+    </div>
+  </div>
+</div>
 
-.about-welcome {
-  max-width: 800px;
-  margin: 100px auto;
-  padding: 0 30px;
-}
-.editorial-separator {
-  width: 40px;
-  height: 1px;
-  background: var(--text-light);
-  margin: 24px auto;
-  opacity: 0.4;
-}
-.editorial-quote {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  line-height: 1.8;
-  color: var(--text-mid);
-  font-style: italic;
-}
-.about-stats-section { padding: 40px 30px 100px; }
-.stats-grid {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 60px;
-  flex-wrap: wrap;
-  max-width: 1000px;
-  margin: 50px auto 0;
-}
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  min-width: 140px;
-}
-.stat-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  right: -30px;
-  top: 50%;
-  transform: translateY(-50%) rotate(30deg);
-  width: 1px;
-  height: 60px;
-  background: var(--border);
-}
-.stat-number {
-  font-family: 'Playfair Display', serif;
-  font-size: 64px;
-  color: var(--text-dark);
-  margin-bottom: 8px;
-  font-weight: 400;
-  line-height: 1;
-}
-.stat-label {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  color: var(--text-light);
-  font-style: italic;
-  text-transform: lowercase;
-}
+<div class="modal-overlay" id="auth-modal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-logo"><span>Aca</span><span>Connect</span></div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchTab('login')">Iniciar Sesión</div>
+      <div class="modal-tab" onclick="switchTab('register')">Registrarse</div>
+    </div>
+    <div class="modal-form active" id="tab-login">
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="correo@ejemplo.com" id="login-email"/></div>
+      <div class="form-group"><label class="form-label">Contraseña</label>
+        <div class="pass-wrapper">
+          <input class="form-input" type="password" placeholder="••••••••" id="login-pass"/>
+          <button type="button" class="btn-eye" onclick="togglePass('login-pass',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <button class="btn-modal-submit" onclick="doLogin()">Iniciar Sesión</button>
+    </div>
+    <div class="modal-form" id="tab-register">
+      <div class="form-group"><label class="form-label">Nombre completo</label><input class="form-input" type="text" placeholder="Tu nombre" id="reg-name"/></div>
+      <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="correo@ejemplo.com" id="reg-email"/></div>
+      <div class="form-group"><label class="form-label">Número de teléfono <span style="font-weight:400;color:var(--text-light)">(opcional)</span></label>
+        <div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s;" onfocusin="this.style.borderColor='var(--teal)'" onfocusout="this.style.borderColor='var(--border)'">
+          <span style="padding:0 12px;font-size:14px;color:var(--text-mid);border-right:1.5px solid var(--border);line-height:48px;background:#FAFAFA;">🇲🇽 +52</span>
+          <input style="border:none;outline:none;padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:14px;flex:1;" type="tel" placeholder="744 123 4567" id="reg-phone" maxlength="10"/>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Contraseña</label>
+        <div class="pass-wrapper">
+          <input class="form-input" type="password" placeholder="Mínimo 6 caracteres" id="reg-pass"/>
+          <button type="button" class="btn-eye" onclick="togglePass('reg-pass',this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+      <button class="btn-modal-submit" onclick="doRegister()">Crear Cuenta</button>
+    </div>
+  </div>
+</div>
 
-/* CONTACTO */
-#page-contact {
-  min-height: 100vh;
-  background: var(--bg-light);
-  padding: 120px 64px 80px;
-  transition: background 0.3s;
-}
-#page-contact h2 { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--teal-dark); margin-bottom: 12px; }
-#page-contact .contact-sub { color: var(--text-mid); font-size: 18px; margin-bottom: 48px; }
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 900px; }
-.contact-info p { font-size: 15px; color: var(--text-mid); line-height: 1.7; margin-bottom: 28px; }
-.contact-detail { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.contact-detail .dot { width: 38px; height: 38px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 16px; color:#fff; }
-.contact-detail span { font-size: 15px; color: var(--text-mid); }
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetailOutside(event)">
+  <div class="detail-modal" id="detail-modal">
+    <button class="detail-close" onclick="closeDetail()">×</button>
+    <div class="detail-gallery">
+      <img class="detail-main-img" id="detail-main-img" src="" alt=""/>
+      <div class="detail-thumbs" id="detail-thumbs"></div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-main">
+        <div class="detail-cat-badge" id="detail-cat-badge"></div>
+        <h2 class="detail-title" id="detail-title"></h2>
+        <div class="detail-rating-row">
+          <div class="stars-row" id="detail-stars"></div>
+          <span class="detail-rating-num" id="detail-rating-num"></span>
+          <span class="detail-reviews" id="detail-reviews"></span>
+        </div>
+        <div class="detail-section-label">Sobre este servicio</div>
+        <p class="detail-desc" id="detail-desc"></p>
+        <div class="detail-location" id="detail-location">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="detail-loc-text"></span>
+        </div>
+        <div class="detail-provider" id="detail-provider"></div>
+      </div>
+      <div class="detail-sidebar">
+        <div class="detail-price-box">
+          <div class="detail-price" id="detail-price"></div>
+          <div class="detail-price-type" id="detail-price-type"></div>
+          <button class="btn-contact-provider" id="btn-contact" onclick="contactProvider()">Contactar proveedor</button>
+          <button class="btn-share" onclick="shareService()">🔗 Compartir</button>
+        </div>
+      </div>
+    </div>
+    <div class="resenas-section" id="resenas-section">
+      <div class="resenas-header"><h3>Reseñas</h3></div>
+      <div class="resenas-summary" id="resenas-summary" style="display:none;">
+        <div class="resenas-big-num" id="resena-avg">0</div>
+        <div class="resenas-summary-right">
+          <div class="resenas-summary-stars" id="resena-avg-stars"></div>
+          <div class="resenas-total" id="resena-total"></div>
+          <div id="resena-dist" style="margin-top:10px;"></div>
+        </div>
+      </div>
+      <div id="resena-form-area"></div>
+      <div id="resenas-list"><div class="resenas-empty">Cargando reseñas...</div></div>
+    </div>
+    <div class="detail-similares">
+      <h3>Más en <span id="detail-cat-label-sim"></span> <a onclick="filterByCatAndClose()">Ver todos →</a></h3>
+      <div class="similares-grid" id="similares-grid"></div>
+    </div>
+  </div>
+</div>
 
-/* MODALES & DETALLES */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:24px;width:420px;max-width:95vw;padding:40px 36px;}
-.modal-tabs{display:flex;margin-bottom:24px;border-bottom:2px solid var(--border);}
-.modal-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-light);border-bottom:2px solid transparent;}
-.modal-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
-.modal-form{display:none;}
-.modal-form.active{display:block;}
-.btn-modal-submit{width:100%;background:var(--orange);color:#fff;border:none;border-radius:100px;padding:13px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;}
-.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-light);}
-.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;padding:14px 28px;border-radius:100px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity .3s,transform .3s;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px);}
+<div class="modal-overlay" id="profile-modal-overlay" onclick="if(event.target===this)closeProfileModal()">
+  <div class="profile-modal">
+    <button class="modal-close" onclick="closeProfileModal()">×</button>
+    <h3>Editar Perfil</h3>
+    <div class="avatar-upload">
+      <div class="avatar-big" id="avatar-big-preview" onclick="document.getElementById('avatar-file-input').click()">
+        <span id="avatar-big-letter"></span>
+        <div class="avatar-big-overlay">📷</div>
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="previewAvatar(this)"/>
+      </div>
+      <span class="avatar-upload-hint">Toca para cambiar tu foto</span>
+    </div>
+    <div class="form-group"><label class="form-label">Nombre completo</label><input class="form-input" type="text" id="profile-nombre"/></div>
+    <div class="form-group"><label class="form-label">Teléfono</label>
+      <div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;" onfocusin="this.style.borderColor='var(--teal)'" onfocusout="this.style.borderColor='var(--border)'">
+        <span style="padding:0 12px;font-size:14px;color:var(--text-mid);border-right:1.5px solid var(--border);line-height:48px;background:#FAFAFA;">🇲🇽 +52</span>
+        <input style="border:none;outline:none;padding:13px 14px;font-family:'DM Sans',sans-serif;font-size:14px;flex:1;" type="tel" id="profile-telefono" maxlength="10"/>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" id="profile-email" disabled style="opacity:.6;cursor:not-allowed;"/></div>
+    <button class="btn-publish" onclick="saveProfile()">Guardar Cambios</button>
+  </div>
+</div>
 
-.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:250;overflow-y:auto;backdrop-filter:blur(6px);}
-.detail-overlay.open{display:block;}
-.detail-modal{background:#fff;border-radius:24px;max-width:960px;margin:40px auto;padding:0;overflow:hidden;}
-.detail-gallery{position:relative;background:#111;}
-.detail-main-img{width:100%;height:420px;object-fit:cover;display:block;}
-.detail-thumbs{display:flex;gap:8px;padding:10px 16px;background:#0a0a0a;overflow-x:auto;}
-.detail-thumb{width:80px;height:60px;object-fit:cover;border-radius:8px;cursor:pointer;opacity:.55; border:2px solid transparent;}
-.detail-thumb.active{opacity:1;border-color:var(--orange);}
-.detail-body{display:grid;grid-template-columns:1fr 320px;}
-.detail-main{padding:36px;}
-.detail-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text-dark); margin-bottom:12px;}
-.detail-sidebar{padding:36px 28px;border-left:1px solid var(--border);background:#FAFCFB;}
-.detail-price{font-size:32px;font-weight:900;color:var(--text-dark);}
-.btn-contact-provider{width:100%;background:var(--orange);color:#fff;border:none;border-radius:100px;padding:14px;font-weight:700;cursor:pointer;margin-top:12px;}
+<div class="modal-overlay" id="mispub-modal-overlay" onclick="if(event.target===this)closeMisPub()">
+  <div class="mispub-modal">
+    <button class="modal-close" onclick="closeMisPub()">×</button>
+    <h3>Mis Publicaciones</h3>
+    <div id="mispub-content"><div class="loading-state"><div class="spinner"></div><p>Cargando...</p></div></div>
+  </div>
+</div>
 
-/* DROPDOWN & ADMIN */
-.profile-dropdown{position:relative;display:inline-block;}
-.profile-trigger{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:100px;}
-.profile-avatar{width:36px;height:36px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;}
-.dropdown-menu{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);min-width:220px;display:none;z-index:200;}
-.dropdown-menu.open{display:block;}
-.dropdown-item{display:flex;align-items:center;gap:12px;padding:12px 18px;font-size:14px;color:var(--text-dark);cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'DM Sans',sans-serif;}
-.dropdown-item:hover{background:var(--bg-light);}
-.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
-.admin-overlay.open{display:flex;}
-.admin-panel{background:#fff;border-radius:24px;width:100%;max-width:900px;padding:40px;margin:auto;}
-.admin-tab{padding:8px 20px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--text-mid);}
-.admin-tab.active{background:var(--teal);color:#fff;border-color:var(--teal);}
-.admin-card{border:1.5px solid var(--border);border-radius:14px;padding:20px;display:flex;gap:16px;}
-.admin-card-img{width:80px;height:80px;border-radius:10px;object-fit:cover;}
+<div class="admin-overlay" id="admin-panel" onclick="closeAdminOutside(event)">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div style="display:flex;align-items:center;">
+        <h2>Panel de Administración</h2>
+        <span class="badge-count" id="admin-badge">0</span>
+      </div>
+      <button class="modal-close" style="position:static;font-size:26px;" onclick="closeAdmin()">×</button>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="pendientes" onclick="switchAdminTab(this)">⏳ Pendientes</button>
+      <button class="admin-tab" data-tab="activos" onclick="switchAdminTab(this)">✅ Activos</button>
+      <button class="admin-tab" data-tab="rechazados" onclick="switchAdminTab(this)">❌ Rechazados</button>
+      <button class="admin-tab" data-tab="usuarios" onclick="switchAdminTab(this)">👥 Usuarios</button>
+    </div>
+    <div class="admin-list" id="admin-list">
+      <div class="loading-state"><div class="spinner"></div><p>Cargando...</p></div>
+    </div>
+  </div>
+</div>
 
-/* ─── AJUSTES MODO OSCURO GLOBAL ─── */
-[data-theme="dark"] .mkt-header, [data-theme="dark"] .mkt-controls, [data-theme="dark"] #page-contact { background: var(--bg-white); border-bottom: 1px solid var(--border); }
-[data-theme="dark"] .mkt-header h2, [data-theme="dark"] #page-contact h2 { color: var(--text-dark); }
-[data-theme="dark"] .card, [data-theme="dark"] .form-card, [data-theme="dark"] .modal, [data-theme="dark"] .detail-modal, [data-theme="dark"] .dropdown-menu, [data-theme="dark"] .admin-panel { background: var(--bg-light); border: 1px solid var(--border); }
-[data-theme="dark"] .mkt-search, [data-theme="dark"] .pill, [data-theme="dark"] .sort-select, [data-theme="dark"] .form-input, [data-theme="dark"] .form-textarea, [data-theme="dark"] .form-select, [data-theme="dark"] .cat-btn { background: #1c051d; color: var(--text-dark); border-color: var(--border); }
-[data-theme="dark"] .pill.active, [data-theme="dark"] .cat-btn.active, [data-theme="dark"] .admin-tab.active { background: var(--orange); color: #fff; border-color: var(--orange); }
-[data-theme="dark"] .about-hero-overlay { background: linear-gradient(to bottom, rgba(38, 7, 41, 0.5) 0%, rgba(38, 7, 41, 0.95) 100%); }
-[data-theme="dark"] .skeleton { background: linear-gradient(110deg, #2A2344 8%, #352d54 18%, #2A2344 33%); }
+<div class="toast" id="toast"></div>
 
-/* ─── RESPONSIVE ─── */
-@media(max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-toggle { display: flex; }
-  .nav-links { position: fixed; top: 0; right: -100%; width: 80%; height: 100vh; background: var(--bg-white); flex-direction: column; padding: 80px 40px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 105; }
-  .nav-links.open { right: 0; }
-  .nav-links a { color: var(--text-dark); font-size: 18px; margin-bottom: 15px; display: block; }
-  .nav-actions { display: none; }
-  .mobile-only { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-  .mkt-controls, .mkt-header, .mkt-body { padding-left: 20px; padding-right: 20px; }
-  .cat-grid, .contact-grid { grid-template-columns: 1fr; }
-  .row-2 { grid-template-columns: 1fr; }
-  #page-contact, #page-publish { padding: 100px 20px 60px; }
-  .detail-body { grid-template-columns: 1fr; }
-  .detail-sidebar { border-left: none; border-top: 1px solid var(--border); }
-  .about-hero-content h2 { letter-spacing: 6px; }
-  .stats-grid { gap: 40px; flex-direction: column; }
-  .stat-item:not(:last-child)::after { display: none; }
-}
+<script src="app.js"></script>
+</body>
+</html>
