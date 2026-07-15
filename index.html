@@ -1,31 +1,11 @@
-<?php
-// 1. Conexión directa a tu base de datos de Hostinger usando IP local
-$servername = "127.0.0.1"; 
-$username = "u240421253_oswaldo"; 
-$password = "Crash3632";          
-$dbname = "u240421253_cursos";    
-
-mysqli_report(MYSQLI_REPORT_OFF);
-$conn = @new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    $db_error = true;
-} else {
-    $db_error = false;
-    $conn->set_charset("utf8mb4");
-    // Traemos inicialmente los cursos de la categoría 1 de forma ligera para el arranque rápido
-    $sql = "SELECT id_curso, titulo, descripcion_corta, precio FROM cursos WHERE id_categoria = 1";
-    $result = $conn->query($sql);
-}
-?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Look Courses</title>
-    <link class="favicon" rel="icon" href="Imagenes/logo.png" type="image/png">
-    <link rel="stylesheet" href="Look Courses.css">
+    <link class="favicon" rel="icon" href="imagenes/logo.png" type="image/png">
+    <link rel="stylesheet" href="look-courses.css">
 </head>
 <body>
 
@@ -34,7 +14,7 @@ if ($conn->connect_error) {
 <nav class="navbar">
     <div class="navbar-left-group">
         <div class="navbar-logo">
-            <a href="Look Courses.php"><img src="Imagenes/logo blanco.png" alt="Look Courses Logo"></a>
+            <a href="index.html"><img src="imagenes/logo-blanco.png" alt="Look Courses Logo"></a>
         </div>
         <div class="navbar-search movil-search">
             <i class="fas fa-search search-icon"></i>
@@ -75,9 +55,9 @@ if ($conn->connect_error) {
 <div class="carousel-wrapper">
     <div class="carousel-container">
         <div class="carousel-slide">
-            <div class="carousel-item"><img src="Carusel Imag/imagen carusel1.png" alt="1"></div>
-            <div class="carousel-item"><img src="Carusel Imag/imagen carusel2.png" alt="2"></div>
-            <div class="carousel-item"><img src="Carusel Imag/imagen carusel3.png" alt="3"></div>
+            <div class="carousel-item"><img src="carusel-imag/imagen-carusel1.png" alt="1"></div>
+            <div class="carousel-item"><img src="carusel-imag/imagen-carusel2.png" alt="2"></div>
+            <div class="carousel-item"><img src="carusel-imag/imagen-carusel3.png" alt="3"></div>
         </div>
     </div>
     <div class="carousel-dots">
@@ -107,36 +87,7 @@ if ($conn->connect_error) {
     </div>
     
     <div class="courses-grid" id="courses-grid">
-        <?php
-        if (!$db_error && isset($result) && $result->num_rows > 0) {
-            while($curso = $result->fetch_assoc()) {
-                $srcImagen = 'Cursos Imag/imagen_cursos1.png';
-                ?>
-                <div class="course-card" data-id="<?php echo $curso['id_curso']; ?>">
-                    <a href="Cursos Detalle.php?id=<?php echo $curso['id_curso']; ?>" style="text-decoration: none; color: inherit; display: block;">
-                        <div class="course-img-placeholder">
-                            <img src="<?php echo $srcImagen; ?>" alt="<?php echo htmlspecialchars($curso['titulo']); ?>" class="lazy-course-img">
-                        </div>
-                        <div class="course-content">
-                            <h3 class="course-title"><?php echo htmlspecialchars($curso['titulo']); ?></h3>
-                            <p class="course-subtitle"><?php echo htmlspecialchars($curso['descripcion_corta']); ?></p>
-                            <div class="course-stats">
-                                <span class="stars">
-                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                </span>
-                                <span class="users"><i class="far fa-user"></i> 250 usuarios</span>
-                            </div>
-                            <div class="course-price">$<?php echo number_format($curso['precio'], 2); ?> MXN</div>
-                        </div>
-                    </a>
-                </div>
-                <?php
-            }
-        } else {
-            echo '<p style="color: #888; grid-column: 1/-1; text-align: center; padding: 20px;">Cargando catálogo de cursos...</p>';
-        }
-        if (!$db_error && isset($conn)) { $conn->close(); }
-        ?>
+        <!-- Los cursos se inyectarán aquí dinámicamente -->
     </div>
     
     <div class="view-more-container"><i class="fas fa-chevron-down"></i></div>
@@ -316,6 +267,6 @@ if ($conn->connect_error) {
     </div>
 </div>
 
-<script src="Look%20Courses.js?v=9"></script>
+<script src="look-courses.js?v=10"></script>
 </body>
 </html>
